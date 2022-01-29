@@ -7,6 +7,12 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 from pygame import mixer
 
+# TODO: Implement shuffle and repeat features
+# TODO: Implement shuffle and repeat features
+# TODO: Implement next and previous functions
+# TODO: Place a default album art when program first start
+# TODO: Place an album art next to playlist. If only a file is selected, use default album art
+
 
 class MusicPlayer(tk.Tk):
     def __init__(self):
