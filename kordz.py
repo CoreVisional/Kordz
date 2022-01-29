@@ -10,6 +10,7 @@ from pygame import mixer
 # TODO: Implement shuffle and repeat features
 # TODO: Implement shuffle and repeat features
 # TODO: Implement next and previous functions
+# TODO: Implement a progress bar for active track
 # TODO: Place a default album art when program first start
 # TODO: Place an album art next to playlist. If only a file is selected, use default album art
 
