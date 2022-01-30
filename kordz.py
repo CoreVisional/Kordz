@@ -8,8 +8,6 @@ from PIL import Image, ImageTk
 from pygame import mixer
 
 # TODO: Implement shuffle and repeat features
-# TODO: Implement shuffle and repeat features
-# TODO: Implement next and previous functions
 # TODO: Implement a progress bar for active track
 # TODO: Place a default album art when program first start
 # TODO: Place an album art next to playlist. If only a file is selected, use default album art
@@ -27,6 +25,10 @@ class MusicPlayer(tk.Tk):
         self.is_on_repeat = False
         self.is_mute = False
         self.is_load_file = False
+
+        self.previous_track_index = 0
+        self.next_track_index = 0
+        self.track_info = None
 
         self.song_directory = None
 
@@ -162,13 +164,13 @@ class MusicPlayer(tk.Tk):
         self.shuffle_button = Button(self.bottom_frame, relief=tk.FLAT, image=self.icons["shuffle_icon"], bg="silver", state=tk.DISABLED, highlightthickness=0, bd=0)
         self.shuffle_button.grid(row=0, column=0, padx=10)
 
-        self.previous_button = Button(self.bottom_frame, relief=tk.FLAT, image=self.icons["previous_icon"], bg="silver", state=tk.DISABLED, highlightthickness=0, bd=0)
+        self.previous_button = Button(self.bottom_frame, relief=tk.FLAT, image=self.icons["previous_icon"], bg="silver", state=tk.DISABLED, highlightthickness=0, bd=0, command=self.play_previous_track)
         self.previous_button.grid(row=0, column=1, padx=10)
 
         self.play_button = Button(self.bottom_frame, relief=tk.FLAT, image=self.icons["play_pause_icon"][0], bg="silver", state=tk.DISABLED, highlightthickness=0, bd=0, command=self.toggle_play_pause)
         self.play_button.grid(row=0, column=2, padx=10)
 
-        self.next_button = Button(self.bottom_frame, relief=tk.FLAT, image=self.icons["next_icon"], bg="silver", state=tk.DISABLED, highlightthickness=0, bd=0)
+        self.next_button = Button(self.bottom_frame, relief=tk.FLAT, image=self.icons["next_icon"], bg="silver", state=tk.DISABLED, highlightthickness=0, bd=0, command=self.play_next_song)
         self.next_button.grid(row=0, column=4, padx=10)
 
         self.repeat_button = Button(self.bottom_frame, relief=tk.FLAT, image=self.icons["repeat_icon"][0], bg="silver", state=tk.DISABLED, highlightthickness=0, bd=0)
@@ -201,12 +203,56 @@ class MusicPlayer(tk.Tk):
         # Set the listbox's scrollbar property to "yview" for vertical and "xview" for horizontal
         self.vertical_scrollbar.config(command=self.playlist_box.yview)
         self.horizontal_scrollbar.config(command=self.playlist_box.xview)
+    
+    def start_music_playlist(self):
+        self.track_info = self.file_info[self.playlist_box.curselection()[0]]
+        mixer.music.load(self.track_info[1])
+        mixer.music.play()
+
+    def play_previous_track(self):
+        try:
+            self.previous_track_index = self.playlist_box.curselection()[0] - 1
+
+            # Clear active bar in the playlist panel
+            self.playlist_box.selection_clear(0, tk.END)
+
+            # Set the active bar to the next song in the playlist
+            self.playlist_box.selection_set(self.previous_track_index)
+
+            # Activate the new song bar
+            self.playlist_box.activate(self.previous_track_index)
+
+            self.start_music_playlist()
+        except IndexError:
+            # Set the active bar to the last track in the playlist
+            self.playlist_box.selection_set(tk.END)
+            # Activate new selection bar for the last track in the playlist
+            self.playlist_box.activate(tk.END)
+
+            self.start_music_playlist()
+    
+    def play_next_song(self):
+        try:
+            self.next_track_index = self.playlist_box.curselection()[0] + 1
+
+            # Clear active bar in the playlist panel
+            self.playlist_box.selection_clear(0, tk.END)
+
+            # Set the active bar to the next song in the playlist
+            self.playlist_box.selection_set(self.next_track_index)
+
+            # Activate the new song bar
+            self.playlist_box.activate(self.next_track_index)
+
+            self.start_music_playlist()
+        except IndexError:
+            self.playlist_box.selection_set(0)
+            self.playlist_box.activate(0)
+            self.start_music_playlist()
 
     def play_music(self):
         if self.song_directory is not None:
-            self.current_song = self.file_info[self.playlist_box.curselection()[0]]
-            mixer.music.load(self.current_song[1])
-            mixer.music.play()
+            self.start_music_playlist()
         else:
             mixer.music.play()
 
