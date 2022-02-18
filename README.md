@@ -30,3 +30,11 @@ cd Kordz
 # Install the requirements
 pip install -r requirements.txt
 ```
+
+## TODO
+
+-   Implement repeat feature
+-   Implement a progress bar for active track
+-   Place a default album art when program first start
+-   Place an album art next to playlist. If only a file is selected but
+    does not have an album art, then use the default album art
