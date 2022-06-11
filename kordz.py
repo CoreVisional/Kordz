@@ -1,11 +1,11 @@
 """Kordz is a simple music player using tkinter."""
 
-import os
-import pygame
-import tkinter as tk
 from tkinter import ttk, Button, filedialog as fd
 from random import randint
 from PIL import Image, ImageTk
+import os
+import pygame
+import tkinter as tk
 
 
 # pylint: disable="R0902, R0904"
@@ -14,39 +14,30 @@ class MusicPlayer(tk.Tk):
         super().__init__()
         pygame.init()
         pygame.mixer.init()
-
         self.track_count: int = 0
         self.file_indices: int = 0
-
         self.song_list: list = []
         self.new_track_selection: list = []
-
         self.file_info: dict = {}
         self.icons: dict = {}
-
         self.is_music_paused: bool = False
         self.music_playing: bool = False
         self.is_mute: bool = False
         self.is_shuffle: bool = False
         self.is_playlist_repeat: bool = False
         self.is_track_repeat: bool = False
-
         self.menubar = None
         self.filemenu = None
-
         self.playlist_frame = None
         self.bottom_frame = None
-
         self.music_file = None
         self.song_directory = None
-
         self.shuffle_button = None
         self.previous_button = None
         self.play_button = None
         self.next_button = None
         self.repeat_button = None
         self.audio_button = None
-
         self.configure_window()
         self.setup_bottom_frame()
 
