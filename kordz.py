@@ -14,7 +14,7 @@ class MusicPlayer(tk.Tk):
         super().__init__()
         pygame.init()
         pygame.mixer.init()
-        self.track_count: int = 0
+        # self.track_count: int = 0
         self.file_indices: int = 0
         self.song_list: list = []
         self.new_track_selection: list = []
@@ -309,12 +309,13 @@ class MusicPlayer(tk.Tk):
             "ogg",
         )
 
-        for file_index, song_filename in enumerate(os.listdir(self.song_directory)):
+        filename_list = os.listdir(self.song_directory)
+
+        for file_index, song_filename in enumerate(filename_list, start=1):
             song_path = os.path.join(self.song_directory, song_filename)
             if song_filename.endswith(file_extension):
-                self.track_count += 1
                 self.song_list.append(song_filename)
-                self.playlist_box.insert(tk.END, f"{self.track_count}. {song_filename}")
+                self.playlist_box.insert(tk.END, f"{file_index}. {song_filename}")
                 self.file_info[file_index] = [song_filename, song_path]
 
             self.file_indices += 1
