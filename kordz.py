@@ -32,6 +32,7 @@ class MusicPlayer(tk.Tk):
         self.bottom_frame = None
         self.music_file = None
         self.song_directory = None
+        self.clear_playlist_button = None
         self.shuffle_button = None
         self.previous_button = None
         self.play_button = None
@@ -96,16 +97,17 @@ class MusicPlayer(tk.Tk):
     def setup_playlist_panel(self) -> None:
         # Create a frame for the playlist listbox
         self.playlist_frame = tk.Frame(self)
-        self.playlist_frame.grid(row=0, column=0, sticky="w", padx=15)
+        self.playlist_frame.grid(row=0, column=0, sticky="w", padx=20, pady=(0, 60))
 
         # Create a listbox for the playlist panel
         self.playlist_box = tk.Listbox(
             self.playlist_frame,
             bg="#111",
             fg="White",
-            width=65,
-            height=35,
+            width=50,
+            height=32,
             highlightthickness=0,
+            font="Helvetica 12",
             relief=tk.FLAT,
         )
         self.playlist_box.grid(row=0, column=0)
@@ -179,6 +181,20 @@ class MusicPlayer(tk.Tk):
 
     def setup_buttons(self) -> None:
         self.load_icons()
+
+        self.clear_playlist_button = Button(
+            # self.bottom_frame,
+            relief=tk.FLAT,
+            width=50,
+            height=10,
+            text="Clear Playlist",
+            font="Segoe 11",
+            bg="silver",
+            # state=tk.DISABLED,
+            highlightthickness=0,
+            command=self.clear_playlist,
+        )
+        # self.clear_playlist_button.grid(row=2, column=6, padx=67, pady=15)
 
         self.shuffle_button = Button(
             self.bottom_frame,
@@ -265,7 +281,7 @@ class MusicPlayer(tk.Tk):
             from_=0,
             to=1,
             orient=tk.HORIZONTAL,
-            length=150,
+            length=180,
             command=self.set_volume,
         )
 
@@ -319,6 +335,9 @@ class MusicPlayer(tk.Tk):
                 self.file_info[file_index] = [song_filename, song_path]
 
             self.file_indices += 1
+
+    def clear_playlist(self):
+        self.playlist_box.delete(0, tk.END)
 
     def start_music_playlist(self) -> None:
         self.track_info = self.file_info[self.playlist_box.curselection()[0]]
